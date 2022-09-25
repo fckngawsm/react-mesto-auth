@@ -1,0 +1,19 @@
+.registr__text {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+    color: white;
+    border: none;
+    width: 358px;
+    background-color: black;
+    padding-bottom: 13px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #CCCCCC;
+    box-sizing: border-box;
+}
+.registr__text:last-child {
+    margin-bottom: 0;
+}
+.registr__text:focus {
+    outline: none;
+}

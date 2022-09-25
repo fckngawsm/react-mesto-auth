@@ -1,0 +1,13 @@
+.element {
+    position: relative;
+    width: 282px;
+    background-color: white;
+    border-radius: 10px 10px 10px 10px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 900px) {
+    .element {
+        justify-self: center;
+    }
+}

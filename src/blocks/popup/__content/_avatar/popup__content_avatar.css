@@ -1,0 +1,4 @@
+.popup__content_avatar {
+    height: min(272px, calc(100vh - 100px));
+    padding-bottom: 0;
+}
