@@ -1,0 +1,11 @@
+.header__source {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    opacity: 1;
+    transition: opacity linear .8s;
+}
+.header__source:hover{
+    opacity: 0.6;
+}

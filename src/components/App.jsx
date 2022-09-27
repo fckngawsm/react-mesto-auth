@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 
 import "../index.css";
 import api from "../utils/api";
@@ -11,8 +11,12 @@ import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import Registr from "./Regist";
+import Register from "./Register";
+import Login from "./Login";
+import InfoTooltip from "./InfoTooltip";
+import * as auth from "../utils/auth";
 
+import ProtectedRoute from "./ProtectedRoute";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function App() {
@@ -37,7 +41,10 @@ function App() {
       })
       .catch((err) => console.log(`Error: ${err}`));
   }, []);
-
+  // history
+  const history = useHistory();
+  //
+  const [email, setEmail] = React.useState("");
   // state
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
@@ -49,6 +56,12 @@ function App() {
   //
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  //
+  const [isInfoTooltopOpen, setIsInfoTooltopOpen] = React.useState(false);
+  //
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  //
+  const [isSuccess, setIsSuccess] = React.useState(false);
 
   // редактирование профиля
   function handleEditProfileClick() {
@@ -64,6 +77,7 @@ function App() {
   }
   // закрытие попапов
   function closeAllPopups() {
+    setIsInfoTooltopOpen(false);
     setIsImagePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -73,7 +87,8 @@ function App() {
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
-    selectedCard;
+    selectedCard ||
+    isInfoTooltopOpen;
 
   React.useEffect(() => {
     function closeByEscape(evt) {
@@ -101,7 +116,7 @@ function App() {
   function handleCardClick(card) {
     setIsImagePopupOpen(true);
     setSelectedCard(card);
-    console.log('true')
+    console.log("true");
   }
 
   function handleCardLike(card) {
@@ -164,26 +179,98 @@ function App() {
       .then(() => closeAllPopups())
       .catch((err) => console.log(err));
   }
+
+  function handleRegisterSubmit(email, password) {
+    auth
+      .register(email, password)
+      .then(() => {
+        setIsInfoTooltopOpen(true);
+        setIsSuccess(true);
+        history.push("/sign-in");
+      })
+      .catch((err) => {
+        if (err.status === 400) {
+          console.log("400 - некорректно заполнено одно из полей");
+        }
+        setIsInfoTooltopOpen(true);
+        setIsSuccess(false);
+      });
+  }
+
+  function handleLoginSubmit(email, password) {
+    auth
+      .authorize(email, password)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        setIsLoggedIn(true);
+        setEmail(email);
+        history.push("/");
+      })
+      .catch((err) => {
+        if (err.status === 400) {
+          console.log("400 - не передано одно из полей");
+        } else if (err.status === 401) {
+          console.log("401 - пользователь с email не найден");
+        }
+      });
+  }
+
+
+  React.useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth
+        .getContent(jwt)
+        .then((res) => {
+          setIsLoggedIn(true);
+          setEmail(res.data.email);
+          history.push("/");
+        })
+        .catch((err) => {
+          if (err.status === 401) {
+            console.log("401 — Токен не передан или передан не в том формате");
+          }
+          console.log("401 — Переданный токен некорректен");
+        });
+    }
+  }, [history]);
+
+  function handleSignOut() {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+    history.push("/sign-in");
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header />
-        <Switch>
-          <Route path="/sign-up">
-            <Registr />
-          </Route>
-          {/* <Route path="/sign-in">
-            <Login />
-          </Route> */}
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-            cards={cards}
-          />
+      <>
+        <div className="page">
+          <Header email={email} onSignOut={handleSignOut} />
+          <Switch>
+            <ProtectedRoute
+              exact
+              path="/"
+              isLoggedIn={isLoggedIn}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              cards={cards}
+              component={Main}
+            />
+            <Route path="/sign-up">
+              <Register onRegister={handleRegisterSubmit} />
+            </Route>
+            <Route path="/sign-in">
+              <Login onLogin={handleLoginSubmit} />
+            </Route>
+            <Route>
+              {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+            </Route>
+          </Switch>
+          {isLoggedIn && <Footer />}
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
@@ -204,9 +291,13 @@ function App() {
             onClose={closeAllPopups}
             isOpen={isImagePopupOpen}
           />
-          <Footer />
-        </Switch>
-      </div>
+          <InfoTooltip
+            isOpen={isInfoTooltopOpen}
+            success={isSuccess}
+            onClose={closeAllPopups}
+          />
+        </div>
+      </>
     </CurrentUserContext.Provider>
   );
 }

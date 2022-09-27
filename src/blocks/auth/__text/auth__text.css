@@ -1,4 +1,4 @@
-.registr__text {
+.auth__text {
     font-family: 'Inter', Arial, Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.2;
@@ -11,9 +11,9 @@
     border-bottom: 2px solid #CCCCCC;
     box-sizing: border-box;
 }
-.registr__text:last-child {
-    margin-bottom: 0;
+.auth__text:nth-child(2){
+    margin-bottom:0;
 }
-.registr__text:focus {
+.auth__text:focus {
     outline: none;
 }

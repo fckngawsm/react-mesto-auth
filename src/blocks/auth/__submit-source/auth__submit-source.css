@@ -1,0 +1,12 @@
+.auth__submit-source {
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    margin-left: 5px;
+    opacity: 1;
+    transition: opacity linear .8s;
+}
+
+.auth__submit-source:hover {
+    opacity: .6;
+}

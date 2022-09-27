@@ -17,27 +17,27 @@ export default function EditAvatarPopup(props) {
     }
   }, [props.isOpen]);
 
-  return(
+  return (
     <PopupWithForm
-    isOpen={props.isOpen}
-    onClose={props.onClose}
-    onSubmit={handleSubmit}
-    name={"avatar"}
-    title={"Обновить аватар"}
-    buttonText={"Сохранить"}
-  >
-    <input
-      ref={avatarRef}
-      id="avatar_input"
-      type="url"
-      name="avatar"
-      required
-      placeholder="Ссылка на картинку"
-      className="popup__text popup__text_type_avatar"
-    />
-    <span id="avatar-input_error" className="popup__error">
-      Ошибка!
-    </span>
-  </PopupWithForm>
-  )
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      onSubmit={handleSubmit}
+      name={"avatar"}
+      title={"Обновить аватар"}
+      buttonText={"Сохранить"}
+    >
+      <input
+        ref={avatarRef}
+        id="avatar_input"
+        type="url"
+        name="avatar"
+        required
+        placeholder="Ссылка на картинку"
+        className="popup__text popup__text_type_avatar"
+      />
+      <span id="avatar-input_error" className="popup__error">
+        Ошибка!
+      </span>
+    </PopupWithForm>
+  );
 }
