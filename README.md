@@ -8,4 +8,4 @@
 * Webpack
 * API
 # GH-PAGES
-https://fckngawsm.github.io/mesto-react/
+https://fckngawsm.github.io/mesto-react-auth/
