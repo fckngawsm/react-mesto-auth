@@ -1,3 +1,4 @@
+// базовая ссылка
 export const BASE_URL = "https://auth.nomoreparties.co";
 // общая функции для проверки ответа с сервера
 export function checkServerAnswer(res) {
@@ -42,13 +43,13 @@ export const authorize = (email, password) => {
 };
 // токен
 export const getContent = (jwt) => {
-    return fetch(`${BASE_URL}/users/me`, {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization" : `Bearer ${jwt}`,
-    }
-    })
-    .then(res => res.json())
-    .then(data => data)
-  }
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => data);
+};

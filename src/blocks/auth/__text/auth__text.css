@@ -11,9 +11,11 @@
     border-bottom: 2px solid #CCCCCC;
     box-sizing: border-box;
 }
-.auth__text:nth-child(2){
-    margin-bottom:0;
+
+.auth__text:nth-child(2) {
+    margin-bottom: 0;
 }
+
 .auth__text:focus {
     outline: none;
 }

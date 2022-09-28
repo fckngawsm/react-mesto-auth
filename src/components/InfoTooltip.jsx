@@ -19,6 +19,7 @@ export default function InfoTooltip(props) {
           <img
             className="popup__success"
             src={props.success ? successtrue : successfalse}
+            alt="Попап"
           />
           <h2 className="popup__title popup__title_success">
             {props.success

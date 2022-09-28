@@ -18,7 +18,9 @@ export default function ImagePopup(props) {
           src={props.card ? props.card.link : ""}
           alt={props.card ? props.card.name : ""}
         />
-        <p className="popup__description-image">{props.card ? props.card.name : ''}</p>
+        <p className="popup__description-image">
+          {props.card ? props.card.name : ""}
+        </p>
       </div>
     </div>
   );

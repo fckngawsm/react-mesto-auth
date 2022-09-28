@@ -17,7 +17,7 @@ export default function Login(props) {
     <div className="auth">
       <h1 className="auth__title">Вход</h1>
       <div className="auth__content">
-        <form className="auth__form" name="form-login" onClick={handleSubmit}>
+        <form className="auth__form" name="form-login" onSubmit={handleSubmit}>
           <fieldset className="auth__information">
             <input
               id="login-email"
@@ -29,6 +29,7 @@ export default function Login(props) {
               maxLength="40"
               minLength="2"
               onChange={handleChangeEmail}
+              autoComplete="off"
               required
             />
             <input
@@ -39,14 +40,11 @@ export default function Login(props) {
               className="auth__text login__text_type_password"
               value={userPassword}
               onChange={handleChangePassword}
+              autoComplete="off"
               required
             />
           </fieldset>
-          <button
-            className="auth__submit-btn"
-            type="submit"
-            onClick={props.try}
-          >
+          <button className="auth__submit-btn" type="submit">
             Войти
           </button>
         </form>
