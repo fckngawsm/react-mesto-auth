@@ -48,7 +48,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   //
   const [isSuccess, setIsSuccess] = React.useState(false);
-  //
+
+  //получение данных пользователя и карточкек
     React.useEffect(() => {
       if(isLoggedIn){
         api
