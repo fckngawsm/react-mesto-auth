@@ -26,21 +26,7 @@ function App() {
     avatar: "",
   });
   const [cards, setCards] = React.useState([]);
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cards) => setCards(cards))
-      .catch((err) => console.log(err));
-  }, []);
 
-  React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => console.log(`Error: ${err}`));
-  }, []);
   // history
   const history = useHistory();
   //
@@ -62,6 +48,26 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   //
   const [isSuccess, setIsSuccess] = React.useState(false);
+  //
+    React.useEffect(() => {
+      if(isLoggedIn){
+        api
+        .getInitialCards()
+        .then((cards) => setCards(cards))
+        .catch((err) => console.log(err));
+      }
+  }, [isLoggedIn]);
+
+  React.useEffect(() => {
+    if(isLoggedIn){
+      api
+      .getUserInfo()
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .catch((err) => console.log(`Error: ${err}`));
+    }
+  }, [isLoggedIn]);
 
   // редактирование профиля
   function handleEditProfileClick() {
@@ -103,6 +109,7 @@ function App() {
       };
     }
   }, [isOpen]);
+
 
   // чтобы не схлопаывалась картинка!
   React.useEffect(() => {
@@ -244,7 +251,6 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <>
         <div className="page">
           <Header email={email} onSignOut={handleSignOut} />
           <Switch>
@@ -298,7 +304,6 @@ function App() {
             onClose={closeAllPopups}
           />
         </div>
-      </>
     </CurrentUserContext.Provider>
   );
 }
